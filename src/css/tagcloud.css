@@ -1,0 +1,18 @@
+
+
+.tc-wrapper {
+  display: block;
+  height: 100%;
+}
+
+
+.tc-tag {
+  display: inline-block;
+  padding: 5px;
+  margin: 0 10px 10px 0;
+  background: #eee;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.tc-selected {background: #2578cf;color: white;}
