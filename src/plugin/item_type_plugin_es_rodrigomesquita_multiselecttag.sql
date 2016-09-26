@@ -48,27 +48,35 @@ wwv_flow_api.create_plugin(
 '    v_page_item_name varchar2(100);',
 '    v_static_values p_item.attribute_01%type := p_item.attribute_01;',
 '    v_max_num_values p_item.attribute_02%type := p_item.attribute_02;',
+'    v_sql_query p_item.attribute_04%type := p_item.attribute_04;',
+'    v_source_type p_item.attribute_03%type := p_item.attribute_03;',
+'    ',
 '    v_row_value varchar2(1000);',
 '    v_html varchar2(9000);',
 '    v_num_values number := 0;',
 '    v_item_value varchar2(100);',
 '    v_selected varchar2(100);',
 '    v_value varchar2(100);',
+'    lCur_col1   VARCHAR2(1000);',
+'    lCur_col2   VARCHAR2(1000);',
 '    l_vc_arr2    APEX_APPLICATION_GLOBAL.VC_ARR2;',
+'    lcursor      SYS_REFCURSOR;',
 ' ',
 '    ',
 '  BEGIN',
 '',
 '    v_item_value := p_value;',
 '    v_page_item_name := apex_plugin.get_input_name_for_page_item(p_is_multi_value => TRUE);',
-'    l_vc_arr2 := APEX_UTIL.STRING_TO_TABLE(v_item_value);',
-'    ',
+'    l_vc_arr2 := APEX_UTIL.STRING_TO_TABLE(v_item_value);    ',
+'',
 '  ',
 '    ',
 '      /* ********** Item rendering   ********* */',
 '',
 '            htp.p(''<select id="''||p_item.name||''" name="''||v_page_item_name||''" class="multi_selectlist" multiple="multiple" size="5">'');',
 '',
+'',
+'     if v_source_type = ''S'' Then',
 '',
 '     while v_static_values is not null loop',
 '            v_num_values := v_num_values+1;',
@@ -91,6 +99,27 @@ wwv_flow_api.create_plugin(
 '            htp.p(''<option value="''||v_value||''"  ''||v_selected||'' >''||',
 '                                    upper(substr(v_row_value,1,instr(v_row_value,'';'')-1)) || ''</option>'');               ',
 '           end loop;',
+'           ',
+'      Else',
+'',
+'       OPEN lcursor FOR v_sql_query;',
+'      Loop ',
+'         Fetch lcursor',
+'          INTO lCur_col1,lCur_col2;',
+'          EXIT WHEN lcursor%NOTFOUND;',
+'             v_selected := '''';',
+'             FOR z IN 1..l_vc_arr2.count LOOP',
+'             if lCur_col1 = l_vc_arr2(z) Then',
+'                v_selected := ''selected="selected"'';',
+'             end if; ',
+'             end loop;',
+'          htp.p(''<option value="''||lCur_col1||''"  ''||v_selected||'' >''||',
+'                                    lCur_col2 || ''</option>''); ',
+'      END LOOP;',
+'          CLOSE lcursor;',
+'          ',
+'      end if;',
+'           ',
 '           htp.p(''</select>'');',
 '',
 '      /* ********** javascript   ********* */',
@@ -126,7 +155,7 @@ wwv_flow_api.create_plugin(
 '	Enables user friendly select a list options</p>',
 '<p>',
 '	Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.</p>'))
-,p_version_identifier=>'1.0'
+,p_version_identifier=>'2.0'
 ,p_about_url=>'http://rodrigo-mesquita.com'
 ,p_files_version=>16
 );
@@ -143,6 +172,9 @@ wwv_flow_api.create_plugin_attribute(
 ,p_display_length=>100
 ,p_supported_ui_types=>'DESKTOP'
 ,p_is_translatable=>false
+,p_depending_on_attribute_id=>wwv_flow_api.id(41128445623633937740)
+,p_depending_on_condition_type=>'EQUALS'
+,p_depending_on_expression=>'S'
 ,p_help_text=>'display1;return1,display2;return2'
 );
 wwv_flow_api.create_plugin_attribute(
@@ -159,6 +191,53 @@ wwv_flow_api.create_plugin_attribute(
 ,p_supported_ui_types=>'DESKTOP'
 ,p_is_translatable=>false
 ,p_help_text=>'Specify the maximum number of options can be selected'
+);
+wwv_flow_api.create_plugin_attribute(
+ p_id=>wwv_flow_api.id(41128445623633937740)
+,p_plugin_id=>wwv_flow_api.id(37314066202881823424)
+,p_attribute_scope=>'COMPONENT'
+,p_attribute_sequence=>3
+,p_display_sequence=>5
+,p_prompt=>'Source Type'
+,p_attribute_type=>'SELECT LIST'
+,p_is_required=>true
+,p_default_value=>'S'
+,p_supported_ui_types=>'DESKTOP'
+,p_is_translatable=>false
+,p_lov_type=>'STATIC'
+);
+wwv_flow_api.create_plugin_attr_value(
+ p_id=>wwv_flow_api.id(41128465442907945469)
+,p_plugin_attribute_id=>wwv_flow_api.id(41128445623633937740)
+,p_display_sequence=>5
+,p_display_value=>'Static Values'
+,p_return_value=>'S'
+);
+wwv_flow_api.create_plugin_attr_value(
+ p_id=>wwv_flow_api.id(41128463091367943292)
+,p_plugin_attribute_id=>wwv_flow_api.id(41128445623633937740)
+,p_display_sequence=>10
+,p_display_value=>'SQL Query'
+,p_return_value=>'Q'
+,p_help_text=>'I.E. select column, value from table'
+);
+wwv_flow_api.create_plugin_attribute(
+ p_id=>wwv_flow_api.id(41130041563467292314)
+,p_plugin_id=>wwv_flow_api.id(37314066202881823424)
+,p_attribute_scope=>'COMPONENT'
+,p_attribute_sequence=>4
+,p_display_sequence=>40
+,p_prompt=>'SQL Query'
+,p_attribute_type=>'SQL'
+,p_is_required=>false
+,p_sql_min_column_count=>2
+,p_sql_max_column_count=>2
+,p_supported_ui_types=>'DESKTOP'
+,p_is_translatable=>false
+,p_depending_on_attribute_id=>wwv_flow_api.id(41128445623633937740)
+,p_depending_on_condition_type=>'EQUALS'
+,p_depending_on_expression=>'Q'
+,p_help_text=>'select column_value, column_display from table'
 );
 end;
 /
