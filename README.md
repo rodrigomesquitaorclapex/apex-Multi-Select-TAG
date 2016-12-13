@@ -9,7 +9,7 @@ The apex multi select tag is based Multi-select Tag Cloud; an open-source jQuery
 
 <strong> Current Stable Version </strong>
 
-Version 1.0.0
+Version 1.1.0
 
 <strong> License </strong>
 

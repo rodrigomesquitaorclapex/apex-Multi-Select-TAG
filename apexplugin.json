@@ -1,6 +1,6 @@
 {
   "name" : "Apex-Multi-Select-Tag",
-  "version" : "1.0.0",
+  "version" : "1.1.0",
   "description" : "A user friendly way to create selectable items",
   "keywords" : ["select list", "jquery", "multi-select", "search", "tag cloud", "tagging", "autocomplete", "typeahead", "user friendly", "AJAX"],
   "homepage" : "https://github.com/rodrigomesquitaorclapex/apex-Multi-Select-TAG",
@@ -12,7 +12,9 @@
   "author" : {
     "name" : "Rodrigo Mesquita",
     "email" : "rodrigomesquita.ti@gmail.com",
-    "url" : "orclapextips.blogspot.com"
+    "url" : "orclapextips.blogspot.com",
+    "twitter" : "mesquitarod",
+    "donationUrl" : "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7GTYBRA8QYCDU"
   },
   "repository" : {
     "type" : "git",
@@ -21,7 +23,7 @@
   "oracle" : {
     "versions" : ["11.2.0.1", "12.1.0.1"],
     "apex" : {
-      "versions" : ["4.1.0", "4.2.0", "5.0.0"],
+      "versions" : ["5.0.0"],
       "plugin" : {
         "internalName" : "ES.RODRIGOMESQUITA.MULTISELECTTAG",
         "type" : "item",
