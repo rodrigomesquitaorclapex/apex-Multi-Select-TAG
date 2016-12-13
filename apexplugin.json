@@ -12,7 +12,9 @@
   "author" : {
     "name" : "Rodrigo Mesquita",
     "email" : "rodrigomesquita.ti@gmail.com",
-    "url" : "orclapextips.blogspot.com"
+    "url" : "orclapextips.blogspot.com",
+    "twitter" : "mesquitarod",
+    "donationUrl" : "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7GTYBRA8QYCDU"
   },
   "repository" : {
     "type" : "git",
