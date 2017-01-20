@@ -156,7 +156,7 @@ wwv_flow_api.create_plugin(
 '<p>',
 '	Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.</p>'))
 ,p_version_identifier=>'2.0'
-,p_about_url=>'http://rodrigo-mesquita.com'
+,p_about_url=>'orclapextips.blogspot.com'
 ,p_files_version=>16
 );
 wwv_flow_api.create_plugin_attribute(
