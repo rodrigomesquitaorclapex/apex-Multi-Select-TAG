@@ -5,17 +5,17 @@ whenever sqlerror exit sql.sqlcode rollback
 -- ORACLE Application Express (APEX) export file
 --
 -- You should run the script connected to SQL*Plus as the Oracle user
--- APEX_050000 or as the owner (parsing schema) of the application.
+-- APEX_050100 or as the owner (parsing schema) of the application.
 --
 -- NOTE: Calls to apex_application_install override the defaults below.
 --
 --------------------------------------------------------------------------------
 begin
 wwv_flow_api.import_begin (
- p_version_yyyy_mm_dd=>'2013.01.01'
-,p_release=>'5.0.4.00.12'
+ p_version_yyyy_mm_dd=>'2016.08.24'
+,p_release=>'5.1.0.00.45'
 ,p_default_workspace_id=>68655333203588800947
-,p_default_application_id=>37671
+,p_default_application_id=>12020
 ,p_default_owner=>'RODRIGO'
 );
 end;
@@ -28,13 +28,14 @@ end;
 prompt --application/shared_components/plugins/item_type/es_rodrigomesquita_multiselecttag
 begin
 wwv_flow_api.create_plugin(
- p_id=>wwv_flow_api.id(37314066202881823424)
+ p_id=>wwv_flow_api.id(78442650033881841689)
 ,p_plugin_type=>'ITEM TYPE'
 ,p_name=>'ES.RODRIGOMESQUITA.MULTISELECTTAG'
 ,p_display_name=>'Apex Multi-select Tag '
 ,p_supported_ui_types=>'DESKTOP'
+,p_supported_component_types=>'APEX_APPLICATION_PAGE_ITEMS'
 ,p_css_file_urls=>'#PLUGIN_FILES#css/tagcloud.css'
-,p_plsql_code=>wwv_flow_utilities.join(wwv_flow_t_varchar2(
+,p_plsql_code=>wwv_flow_string.join(wwv_flow_t_varchar2(
 '  function render_item (',
 '    p_item                in apex_plugin.t_page_item,',
 '    p_plugin              in apex_plugin.t_plugin,',
@@ -48,35 +49,27 @@ wwv_flow_api.create_plugin(
 '    v_page_item_name varchar2(100);',
 '    v_static_values p_item.attribute_01%type := p_item.attribute_01;',
 '    v_max_num_values p_item.attribute_02%type := p_item.attribute_02;',
-'    v_sql_query p_item.attribute_04%type := p_item.attribute_04;',
-'    v_source_type p_item.attribute_03%type := p_item.attribute_03;',
-'    ',
 '    v_row_value varchar2(1000);',
 '    v_html varchar2(9000);',
 '    v_num_values number := 0;',
 '    v_item_value varchar2(100);',
 '    v_selected varchar2(100);',
 '    v_value varchar2(100);',
-'    lCur_col1   VARCHAR2(1000);',
-'    lCur_col2   VARCHAR2(1000);',
 '    l_vc_arr2    APEX_APPLICATION_GLOBAL.VC_ARR2;',
-'    lcursor      SYS_REFCURSOR;',
 ' ',
 '    ',
 '  BEGIN',
 '',
 '    v_item_value := p_value;',
 '    v_page_item_name := apex_plugin.get_input_name_for_page_item(p_is_multi_value => TRUE);',
-'    l_vc_arr2 := APEX_UTIL.STRING_TO_TABLE(v_item_value);    ',
-'',
+'    l_vc_arr2 := APEX_UTIL.STRING_TO_TABLE(v_item_value);',
+'    ',
 '  ',
 '    ',
 '      /* ********** Item rendering   ********* */',
 '',
 '            htp.p(''<select id="''||p_item.name||''" name="''||v_page_item_name||''" class="multi_selectlist" multiple="multiple" size="5">'');',
 '',
-'',
-'     if v_source_type = ''S'' Then',
 '',
 '     while v_static_values is not null loop',
 '            v_num_values := v_num_values+1;',
@@ -99,27 +92,6 @@ wwv_flow_api.create_plugin(
 '            htp.p(''<option value="''||v_value||''"  ''||v_selected||'' >''||',
 '                                    upper(substr(v_row_value,1,instr(v_row_value,'';'')-1)) || ''</option>'');               ',
 '           end loop;',
-'           ',
-'      Else',
-'',
-'       OPEN lcursor FOR v_sql_query;',
-'      Loop ',
-'         Fetch lcursor',
-'          INTO lCur_col1,lCur_col2;',
-'          EXIT WHEN lcursor%NOTFOUND;',
-'             v_selected := '''';',
-'             FOR z IN 1..l_vc_arr2.count LOOP',
-'             if lCur_col1 = l_vc_arr2(z) Then',
-'                v_selected := ''selected="selected"'';',
-'             end if; ',
-'             end loop;',
-'          htp.p(''<option value="''||lCur_col1||''"  ''||v_selected||'' >''||',
-'                                    lCur_col2 || ''</option>''); ',
-'      END LOOP;',
-'          CLOSE lcursor;',
-'          ',
-'      end if;',
-'           ',
 '           htp.p(''</select>'');',
 '',
 '      /* ********** javascript   ********* */',
@@ -144,24 +116,25 @@ wwv_flow_api.create_plugin(
 ' ',
 '    RETURN v_result;',
 '  end render_item;'))
+,p_api_version=>1
 ,p_render_function=>'render_item'
 ,p_standard_attributes=>'VISIBLE:SESSION_STATE:SOURCE:ENCRYPT'
 ,p_substitute_attributes=>true
 ,p_subscribe_plugin_settings=>true
-,p_help_text=>wwv_flow_utilities.join(wwv_flow_t_varchar2(
+,p_help_text=>wwv_flow_string.join(wwv_flow_t_varchar2(
 '<p>',
 '	This is Apex Multi-select Tag page item based on JQuery plugin TagCloud (http://www.jqueryscript.net/form/Multi-select-Tag-Cloud-Plugin-With-jQuery-TagCloud.html).</p>',
 '<p>',
 '	Enables user friendly select a list options</p>',
 '<p>',
 '	Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.</p>'))
-,p_version_identifier=>'2.0'
-,p_about_url=>'orclapextips.blogspot.com'
+,p_version_identifier=>'1.0'
+,p_about_url=>'http://orclapextips.blogspot.co.uk/2016/07/oracle-apex-multi-select-tag.html'
 ,p_files_version=>16
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(37314152433689337434)
-,p_plugin_id=>wwv_flow_api.id(37314066202881823424)
+ p_id=>wwv_flow_api.id(78442736264689355699)
+,p_plugin_id=>wwv_flow_api.id(78442650033881841689)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>1
 ,p_display_sequence=>10
@@ -172,14 +145,15 @@ wwv_flow_api.create_plugin_attribute(
 ,p_display_length=>100
 ,p_supported_ui_types=>'DESKTOP'
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(41128445623633937740)
+,p_depending_on_attribute_id=>wwv_flow_api.id(82257029454633956005)
+,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'EQUALS'
 ,p_depending_on_expression=>'S'
 ,p_help_text=>'display1;return1,display2;return2'
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(37409550030332865047)
-,p_plugin_id=>wwv_flow_api.id(37314066202881823424)
+ p_id=>wwv_flow_api.id(78538133861332883312)
+,p_plugin_id=>wwv_flow_api.id(78442650033881841689)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>2
 ,p_display_sequence=>20
@@ -193,51 +167,47 @@ wwv_flow_api.create_plugin_attribute(
 ,p_help_text=>'Specify the maximum number of options can be selected'
 );
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(41128445623633937740)
-,p_plugin_id=>wwv_flow_api.id(37314066202881823424)
+ p_id=>wwv_flow_api.id(82257029454633956005)
+,p_plugin_id=>wwv_flow_api.id(78442650033881841689)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>3
 ,p_display_sequence=>5
 ,p_prompt=>'Source Type'
 ,p_attribute_type=>'SELECT LIST'
 ,p_is_required=>true
-,p_default_value=>'S'
-,p_supported_ui_types=>'DESKTOP'
+,p_default_value=>'Q'
 ,p_is_translatable=>false
 ,p_lov_type=>'STATIC'
 );
 wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(41128465442907945469)
-,p_plugin_attribute_id=>wwv_flow_api.id(41128445623633937740)
-,p_display_sequence=>5
-,p_display_value=>'Static Values'
-,p_return_value=>'S'
-);
-wwv_flow_api.create_plugin_attr_value(
- p_id=>wwv_flow_api.id(41128463091367943292)
-,p_plugin_attribute_id=>wwv_flow_api.id(41128445623633937740)
+ p_id=>wwv_flow_api.id(82257046922367961557)
+,p_plugin_attribute_id=>wwv_flow_api.id(82257029454633956005)
 ,p_display_sequence=>10
 ,p_display_value=>'SQL Query'
 ,p_return_value=>'Q'
 ,p_help_text=>'I.E. select column, value from table'
 );
+wwv_flow_api.create_plugin_attr_value(
+ p_id=>wwv_flow_api.id(82257049273907963734)
+,p_plugin_attribute_id=>wwv_flow_api.id(82257029454633956005)
+,p_display_sequence=>20
+,p_display_value=>'Static Values'
+,p_return_value=>'S'
+);
 wwv_flow_api.create_plugin_attribute(
- p_id=>wwv_flow_api.id(41130041563467292314)
-,p_plugin_id=>wwv_flow_api.id(37314066202881823424)
+ p_id=>wwv_flow_api.id(82257060355448982652)
+,p_plugin_id=>wwv_flow_api.id(78442650033881841689)
 ,p_attribute_scope=>'COMPONENT'
 ,p_attribute_sequence=>4
-,p_display_sequence=>40
+,p_display_sequence=>10
 ,p_prompt=>'SQL Query'
-,p_attribute_type=>'SQL'
+,p_attribute_type=>'TEXTAREA'
 ,p_is_required=>false
-,p_sql_min_column_count=>2
-,p_sql_max_column_count=>2
-,p_supported_ui_types=>'DESKTOP'
 ,p_is_translatable=>false
-,p_depending_on_attribute_id=>wwv_flow_api.id(41128445623633937740)
+,p_depending_on_attribute_id=>wwv_flow_api.id(82257029454633956005)
+,p_depending_on_has_to_exist=>true
 ,p_depending_on_condition_type=>'EQUALS'
 ,p_depending_on_expression=>'Q'
-,p_help_text=>'select column_value, column_display from table'
 );
 end;
 /
@@ -251,8 +221,8 @@ end;
 /
 begin
 wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(37406822128362346690)
-,p_plugin_id=>wwv_flow_api.id(37314066202881823424)
+ p_id=>wwv_flow_api.id(78535405959362364955)
+,p_plugin_id=>wwv_flow_api.id(78442650033881841689)
 ,p_file_name=>'css/tagcloud.css'
 ,p_mime_type=>'text/css'
 ,p_file_charset=>'utf-8'
@@ -300,8 +270,8 @@ end;
 /
 begin
 wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(37427044980670291736)
-,p_plugin_id=>wwv_flow_api.id(37314066202881823424)
+ p_id=>wwv_flow_api.id(78555628811670310001)
+,p_plugin_id=>wwv_flow_api.id(78442650033881841689)
 ,p_file_name=>'tagcloud.js'
 ,p_mime_type=>'text/javascript'
 ,p_file_charset=>'utf-8'
