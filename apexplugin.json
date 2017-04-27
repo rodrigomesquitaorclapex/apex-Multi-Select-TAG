@@ -1,6 +1,6 @@
 {
   "name" : "Apex-Multi-Select-Tag",
-  "version" : "1.2.0",
+  "version" : "1.0.0",
   "description" : "A user friendly way to create selectable items",
   "keywords" : ["select list", "jquery", "multi-select", "search", "tag cloud", "tagging", "autocomplete", "typeahead", "user friendly", "AJAX"],
   "homepage" : "https://github.com/rodrigomesquitaorclapex/apex-Multi-Select-TAG",
